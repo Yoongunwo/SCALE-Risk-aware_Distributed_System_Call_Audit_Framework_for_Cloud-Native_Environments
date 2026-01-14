@@ -8,8 +8,8 @@ char LICENSE[] SEC("license") = "GPL";
 struct {
     // __uint(type, BPF_MAP_TYPE_HASH);
     __uint(type, BPF_MAP_TYPE_LRU_HASH);
-    __type(key, u64);         // (gpid << 32) | syscall_nr
-    __type(value, u32);       // index into prog_array_map
+    __type(key, u64);     
+    __type(value, u32);   
     __uint(max_entries, 4480);
     __uint(pinning, LIBBPF_PIN_BY_NAME);
 } pid_syscall_to_index SEC(".maps");
@@ -24,9 +24,9 @@ struct {
 
 struct {
     __uint(type, BPF_MAP_TYPE_PERCPU_HASH);
-    __uint(max_entries, 128);  // pid 최대 개수
-    __type(key, u32);           // pid
-    __type(value, u64);         // count
+    __uint(max_entries, 128);  
+    __type(key, u32);          
+    __type(value, u64);        
 } counter SEC(".maps");
 
 static __always_inline void increment_counter(u32 pid) {
@@ -34,13 +34,12 @@ static __always_inline void increment_counter(u32 pid) {
     u64 *val = bpf_map_lookup_elem(&counter, &pid);
 
     if (!val) {
-        // 해당 pid 키가 없으면 새로 삽입
         bpf_map_update_elem(&counter, &pid, &init, BPF_ANY);
         val = bpf_map_lookup_elem(&counter, &pid);
-        if (!val) return; // 실패 시
+        if (!val) return; 
     }
 
-    __sync_fetch_and_add(val, 1); // per-CPU라서 race 거의 없음, atomic하게 증가
+    __sync_fetch_and_add(val, 1); 
 }
 
 SEC("tracepoint/syscalls/sys_enter_read")

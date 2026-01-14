@@ -96,7 +96,6 @@ int create_pid_to_podip_map(struct pid_ip_pair *out_pairs, int *out_count) {
         }
         uint32_t ip_int = ntohl(addr.s_addr);
 
-        // 3. Find containerd-shim PID for the sandbox
         snprintf(cmd, sizeof(cmd),
                  "ps -ef | grep containerd-shim | grep %s | grep -v grep | awk '{print $2}'",
                  sandbox_id);
@@ -115,7 +114,6 @@ int create_pid_to_podip_map(struct pid_ip_pair *out_pairs, int *out_count) {
         }
         printf("[INFO] containerd-shim PID: %d\n", shim_pid);
 
-        // 4. Collect all PIDs under the shim process tree
         snprintf(cmd, sizeof(cmd),
                 "pstree -ap %d | grep -E 'sys_generator|postmark' | grep -o ',[0-9]*' | tr -d ','", shim_pid);
         
