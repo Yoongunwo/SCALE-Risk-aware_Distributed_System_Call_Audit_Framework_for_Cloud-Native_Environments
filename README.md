@@ -1,4 +1,4 @@
-# SCALE-Risk-aware Distributed-System-Call-Audit-Framework-for-Cloud-Native-Environments
+# SCALE-Risk-aware Distributed System Call Audit Framework for Cloud Native Environments
 
 This repository provides **SCALE**, a risk-aware distributed system call event collection framework for cloud-native workloads running in Kubernetes. SCALE adopts the sidecar pattern, where a monitoring container is deployed alongside the application container. This design enables real-time collection of system calls from application containers without granting excessive privileges to the monitoring component.
 
@@ -28,19 +28,33 @@ The detailed evaluation methodology and results can be found in the paper (curre
 
 To evaluate the practicality of SCALE, we compared it against Tracee and Tetragon, two widely used centralized monitoring tools in cloud-native environments. The experiments employed the postmark, where the number of containers running the benchmark was scaled, and the CPU resources of the monitoring containers were increased proportionally. As in previous experiments, each monitoring container in SCALE was allocated 3\% of a vCPU and a 1 MB ring buffer.
 
-<p align="center">
+<div align="center">
   <img width="300" height="150" alt="Image1" src="https://github.com/user-attachments/assets/f3b6db4c-6e4d-4c13-95b9-d0ece8418eb6" />
+  <br/>
+  <em>Clust-wise collection rate.</em>
+</div>
+
+<div align="center">
   <img width="300" height="150" alt="Image2" src="https://github.com/user-attachments/assets/d15c0cce-91a0-4dc5-af5a-bb4211708df3" />
+  <br/>
+  <em>Data loss.</em>
+</div>
+
+<div align="center">
   <img width="300" height="150" alt="Image3" src="https://github.com/user-attachments/assets/35ec8371-2ae6-4c92-ae86-f226a85c4ea4" />
-</p>
+  <br/>
+  <em>Kernel-to-User space latency.</em>
+</div>
 
 ## End-to-End Latency: Invocation to Analysis
 
 To demonstrate the effectiveness of differential resource allocation, we evaluated end-to-end latency from system call invocation through event collection to analysis under centralized, evenly distributed, and differential distributed configurations. We used a custom benchmark in which ten application containers each generated approximately 10K system calls per second. Total vCPU allocated to monitoring containers was fixed at 30\% across all configurations to ensure a fair comparison.
 
-<p align="center">
+<div align="center">
   <img width="600" height="200" alt="Image" src="https://github.com/user-attachments/assets/d6bbf21f-6d8e-43fd-a13e-63db614c9e6d" />
-</p>
+  <br/>
+  <em>End-to-end latency comparison across monitoring configurations: centralized (Cen), evenly distributed (Dis-Equal), and two differential distributed setups (Dis-Diff).</em>
+</div>
 
 ## Evaluation using Real-World Scenario
 
